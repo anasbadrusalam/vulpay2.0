@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
@@ -45,26 +46,33 @@ class Receiver extends Resource
         return [
             ID::make()->sortable(),
 
+            BelongsTo::make('Provider')
+                ->hideFromIndex(),
+
             Text::make('Code')
                 ->sortable()
-                ->rules('required')
+                ->rules('required', 'string')
                 ->creationRules('unique:receivers,code')
                 ->updateRules('unique:receivers,code,{{resourceId}}'),
 
             Text::make('Terminal')
                 ->sortable()
-                ->rules('required')
+                ->rules('required', 'numeric')
                 ->creationRules('unique:receivers,terminal')
-                ->updateRules('unique:receivers,terminal,{{resourceId}}'),
+                ->updateRules('unique:receivers,terminal,{{resourceId}}')
+                ->hideFromIndex(),
 
             Number::make('Number')
                 ->sortable()
                 ->rules('required')
                 ->creationRules('unique:receivers,number')
-                ->updateRules('unique:receivers,number,{{resourceId}}'),
+                ->updateRules('unique:receivers,number,{{resourceId}}')
+                ->hideFromIndex(),
 
             Number::make('Balance')
-                ->rules('required'),
+                ->rules('required', 'numeric')
+                ->default(0)
+                ->hideFromIndex(),
 
             Boolean::make('Active')
                 ->rules('required'),

@@ -23,7 +23,7 @@ class Provider extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -49,7 +49,10 @@ class Provider extends Resource
                 ->sortable()
                 ->rules('required')
                 ->creationRules('unique:providers,name')
-                ->updateRules('unique:providers,name,{{resourceId}}'),
+                ->updateRules('unique:providers,name,{{resourceId}}')
+                ->resolveUsing(function ($name) {
+                    return strtoupper($name);
+                }),
 
             Number::make('Min')
                 ->rules('required')
