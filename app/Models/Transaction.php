@@ -11,6 +11,8 @@ class Transaction extends Model
 
     protected $guarded = ['id'];
 
+    protected $hidden = ['code', 'terminal', 'user_id'];
+
     protected $casts = [
         'expired_at' => 'datetime',
     ];

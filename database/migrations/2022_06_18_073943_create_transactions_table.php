@@ -19,9 +19,12 @@ return new class extends Migration
             $table->string('provider');
             $table->string('sender');
             $table->float('rate', 8, 2);
+            $table->string('code');
+            $table->string('terminal');
             $table->string('receiver');
             $table->unsignedBigInteger('amount')->nullable();
             $table->unsignedBigInteger('balance')->nullable();
+            $table->string('status')->default('menunggu');
             $table->timestamp('expired_at')->nullable();
             $table->timestamps();
         });

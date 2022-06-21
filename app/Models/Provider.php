@@ -20,6 +20,6 @@ class Provider extends Model
 
     public function getReceiver()
     {
-        return $this->receivers()->whereActive(true)->first()->orderBy('code');
+        return $this->receivers()->whereActive(true)->orderBy('code')->first();
     }
 }

@@ -40,6 +40,7 @@ class TransactionController extends Controller
     public function store(StoreTransaction $request)
     {
         $provider = Provider::whereName($request->provider)->first();
+        $receiver = $provider->getReceiver();
         $rate = $request->rate ? $request->rate : $provider->rate;
 
         $transaction = Transaction::create([
@@ -47,8 +48,10 @@ class TransactionController extends Controller
             'provider' => $provider->name,
             'sender' => $request->sender,
             'rate' => $rate,
-            'receiver' => $provider->getReceiver()->number,
-            'amount' => $request->amount,
+            'receiver' => $receiver->number,
+            'code' => $receiver->code,
+            'terminal' => $receiver->terminal,
+            'amount' => (int) $request->amount ? $request->amount : 0,
             'balance' => floor($request->amount * $rate),
             'expired_at' => now()->addMinutes($provider->expired_time)
         ]);
@@ -64,7 +67,7 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
-        //
+        return new GeneralResource($transaction);
     }
 
     /**
