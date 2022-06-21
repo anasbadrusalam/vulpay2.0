@@ -11,6 +11,10 @@ class Transaction extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'expired_at' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

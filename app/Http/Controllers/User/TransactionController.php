@@ -4,6 +4,8 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTransaction;
+use App\Http\Resources\GeneralResource;
+use App\Models\Provider;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
@@ -37,7 +39,21 @@ class TransactionController extends Controller
      */
     public function store(StoreTransaction $request)
     {
-        //
+        $provider = Provider::whereName($request->provider)->first();
+        $rate = $request->rate ? $request->rate : $provider->rate;
+
+        $transaction = Transaction::create([
+            'user_id' => $request->user()->id,
+            'provider' => $provider->name,
+            'sender' => $request->sender,
+            'rate' => $rate,
+            'receiver' => $provider->getReceiver()->number,
+            'amount' => $request->amount,
+            'balance' => floor($request->amount * $rate),
+            'expired_at' => now()->addMinutes($provider->expired_time)
+        ]);
+
+        return new GeneralResource($transaction);
     }
 
     /**

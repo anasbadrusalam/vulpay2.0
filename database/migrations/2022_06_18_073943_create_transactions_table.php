@@ -15,6 +15,14 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
+            $table->string('provider');
+            $table->string('sender');
+            $table->float('rate', 8, 2);
+            $table->string('receiver');
+            $table->unsignedBigInteger('amount')->nullable();
+            $table->unsignedBigInteger('balance')->nullable();
+            $table->timestamp('expired_at')->nullable();
             $table->timestamps();
         });
     }

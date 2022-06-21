@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\NotServerNumber;
 use App\Rules\ProviderAvailable;
+use App\Rules\ReceiverAvailable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTransaction extends FormRequest
@@ -26,8 +27,8 @@ class StoreTransaction extends FormRequest
     public function rules()
     {
         return [
-            'sender' => ['required', 'digits_between:10,15', 'starts_with:0', new NotServerNumber()],
-            'provider' => ['required', new ProviderAvailable()],
+            'provider' => ['bail','required', new ProviderAvailable(), new ReceiverAvailable()],
+            'sender' => ['bail', 'required', 'digits_between:10,15', 'starts_with:0', new NotServerNumber()],
             'blacklist_check' => ['boolean'],
         ];
     }

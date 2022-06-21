@@ -5,7 +5,7 @@ namespace App\Rules;
 use App\Models\Provider;
 use Illuminate\Contracts\Validation\Rule;
 
-class ProviderAvailable implements Rule
+class ReceiverAvailable implements Rule
 {
     /**
      * Create a new rule instance.
@@ -26,7 +26,16 @@ class ProviderAvailable implements Rule
      */
     public function passes($attribute, $value)
     {
-        return Provider::whereName($value)->whereActive(true)->get()->isNotEmpty();
+        $provider = Provider::whereName($value)->first();
+
+        if ($provider) {
+            if ($provider->getReceiver()) {
+                return true;
+            }
+            $provider->update(['active' => false]);
+        }
+
+        return false;
     }
 
     /**

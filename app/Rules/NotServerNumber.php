@@ -36,6 +36,6 @@ class NotServerNumber implements Rule
      */
     public function message()
     {
-        return 'Nomor pengirim pulsa salah.';
+        return 'Nomor pengirim pulsa tidak diizinkan.';
     }
 }

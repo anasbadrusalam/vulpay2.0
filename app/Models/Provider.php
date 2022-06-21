@@ -11,8 +11,15 @@ class Provider extends Model
 
     protected $guarded = ['id'];
 
+    // protected $with = ['receivers'];
+
     public function receivers()
     {
         return $this->hasMany(Receiver::class);
+    }
+
+    public function getReceiver()
+    {
+        return $this->receivers()->whereActive(true)->first()->orderBy('code');
     }
 }
