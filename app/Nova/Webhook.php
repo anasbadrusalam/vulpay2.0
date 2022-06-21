@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Illuminate\Support\Str;
+use Laravel\Nova\Fields\BelongsTo;
 
 class Webhook extends Resource
 {
@@ -43,8 +45,19 @@ class Webhook extends Resource
         return [
             ID::make()->sortable(),
 
+            BelongsTo::make('User')
+                ->rules('required')
+                ->creationRules('unique:webhooks,user_id')
+                ->updateRules('unique:webhooks,user_id,{{resourceId}}'),
+
             Text::make('Url')
-                ->sortable()
+                ->creationRules('unique:webhooks,url')
+                ->updateRules('unique:webhooks,url,{{resourceId}}')
+                ->rules('required'),
+
+            Text::make('Secret')
+                ->copyable()
+                ->default(Str::random(10))
                 ->rules('required'),
 
         ];
