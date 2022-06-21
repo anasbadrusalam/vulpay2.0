@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('min')->default(50000);
             $table->bigInteger('max')->default(200000);
             $table->bigInteger('max_balance')->default(1100000);
+            $table->float('rate', 8, 2);
             $table->integer('limit_counter')->default(5);
             $table->boolean('active')->default(true);
             $table->timestamps();

@@ -54,8 +54,14 @@ class Provider extends Resource
                     return strtoupper($name);
                 }),
 
+            Number::make('Rate')
+                ->rules('required', 'numeric')
+                ->step(0.01),
+
+
             Number::make('Min')
                 ->rules('required')
+                ->default(50000)
                 ->hideFromIndex(),
 
             Number::make('Max')
