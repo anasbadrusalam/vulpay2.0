@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\NotInBlackList;
 use App\Rules\NotServerNumber;
 use App\Rules\ProviderAvailable;
 use App\Rules\RateBelowProvider;
@@ -10,6 +11,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTransaction extends FormRequest
 {
+    protected $stopOnFirstFailure = true;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -28,10 +31,16 @@ class StoreTransaction extends FormRequest
     public function rules()
     {
         return [
+            'blacklist_check' => ['bail', 'sometimes', 'boolean'],
             'provider' => ['bail', 'required', new ProviderAvailable(), new ReceiverAvailable()],
-            'sender' => ['bail', 'required', 'digits_between:10,15', 'starts_with:0', new NotServerNumber()],
-            'rate' => ['bail', 'numeric', new RateBelowProvider($this->provider)],
-            'blacklist_check' => ['bail', 'boolean'],
+            'sender' => [
+                'bail',
+                'required',
+                'digits_between:10,15',
+                'starts_with:0',
+                new NotServerNumber(),
+                new NotInBlackList($this->blacklist_check)],
+            'rate' => ['bail', 'required', 'numeric', new RateBelowProvider($this->provider)],
         ];
     }
 }

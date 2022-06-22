@@ -2,20 +2,20 @@
 
 namespace App\Rules;
 
-use App\Models\Provider;
+use App\Models\BlackList;
 use Illuminate\Contracts\Validation\Rule;
 
-class RateBelowProvider implements Rule
+class NotInBlackList implements Rule
 {
-    protected $provider;
+    protected $check = false;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($provider)
+    public function __construct($check)
     {
-        $this->provider = $provider;
+        $this->check = $check;
     }
 
     /**
@@ -27,13 +27,11 @@ class RateBelowProvider implements Rule
      */
     public function passes($attribute, $value)
     {
-        $this->provider = Provider::whereName($this->provider)->first();
-
-        if ($this->provider) {
-            return $value <= $this->provider->rate;
+        if ($this->check) {
+            return BlackList::whereNumber($value)->get()->isEmpty();
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -43,6 +41,6 @@ class RateBelowProvider implements Rule
      */
     public function message()
     {
-        return $this->provider ? 'Rate tidak boleh lebih tinggi dari ' . $this->provider->rate : 'Provder gangguan atau tidak tersedia.';
+        return 'Nomor masuk dalam daftar BlackList.';
     }
 }
