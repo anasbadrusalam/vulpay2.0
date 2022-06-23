@@ -25,6 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('amount')->nullable();
             $table->unsignedBigInteger('balance')->nullable();
             $table->string('status')->default('menunggu');
+            $table->string('note')->nullable();
             $table->timestamp('expired_at')->nullable();
             $table->timestamps();
         });

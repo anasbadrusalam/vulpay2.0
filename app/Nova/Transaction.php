@@ -3,7 +3,13 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Badge;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Currency;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Transaction extends Resource
@@ -41,6 +47,53 @@ class Transaction extends Resource
     {
         return [
             ID::make()->sortable(),
+
+            BelongsTo::make('User')
+                ->hideFromIndex()
+                ->readonly(),
+
+            Text::make('Code')
+                ->readonly(),
+
+            Text::make('Provider')->resolveUsing(function ($name) {
+                return strtoupper($name);
+            })->readonly(),
+
+
+            Text::make('Sender')
+                ->readonly(),
+
+            Number::make('Amount')
+                ->rules('required'),
+
+            Number::make('Rate')
+                ->readonly(),
+
+            Currency::make('Balance')->currency('IDR'),
+
+
+            Text::make('Receiver')
+                ->readonly(),
+
+            DateTime::make('Created At')
+                ->hideFromIndex()
+                ->readonly(),
+
+            DateTime::make('Updated At')
+                ->hideFromIndex()
+                ->readonly(),
+
+            DateTime::make('Expired At')
+                ->hideFromIndex()
+                ->readonly(),
+
+            Badge::make('Status')->map([
+                'menunggu' => 'info',
+                'sukses' => 'success',
+                'dibatalkan' => 'danger',
+            ]),
+
+
         ];
     }
 
