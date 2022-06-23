@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Transaction;
+use Spatie\WebhookServer\WebhookCall;
 
 class TransactionObserver
 {
@@ -25,7 +26,16 @@ class TransactionObserver
      */
     public function updated(Transaction $transaction)
     {
-        //
+        if ($transaction->user->webhook) {
+
+            $webhook = $transaction->user->webhook;
+
+            WebhookCall::create()
+                ->url($webhook->url)
+                ->payload(['data' => $transaction])
+                ->useSecret($webhook->secret)
+                ->dispatch();
+        }
     }
 
     /**
