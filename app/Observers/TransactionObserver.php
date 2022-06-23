@@ -26,10 +26,10 @@ class TransactionObserver
      */
     public function updated(Transaction $transaction)
     {
+
+        
         if ($transaction->user->webhook) {
-
             $webhook = $transaction->user->webhook;
-
             WebhookCall::create()
                 ->url($webhook->url)
                 ->payload(['data' => $transaction])
