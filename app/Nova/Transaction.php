@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Metrics\TransactionsPerDay;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Badge;
 use Laravel\Nova\Fields\BelongsTo;
@@ -105,7 +106,9 @@ class Transaction extends Resource
      */
     public function cards(NovaRequest $request)
     {
-        return [];
+        return [
+            // new TransactionsPerDay()
+        ];
     }
 
     /**
