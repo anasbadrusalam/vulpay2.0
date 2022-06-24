@@ -26,9 +26,7 @@ class TransactionObserver
      * @return void
      */
     public function updated(Transaction $transaction)
-    {
-        $payload = $transaction;
-        
+    {        
         if ($transaction->isDirty('status')) {
 
             // if ($transaction->status == 'sukses') {
@@ -38,12 +36,12 @@ class TransactionObserver
             // if ($transaction->getOriginal('status') == 'sukses' && $transaction->status !== 'sukses') {
             //     $transaction->user->subBalance($transaction->balance);
             // }
-            
+
             if ($transaction->user->webhook) {
                 $webhook = $transaction->user->webhook;
                 WebhookCall::create()
                     ->url($webhook->url)
-                    ->payload(['data' => $payload
+                    ->payload(['data' => $transaction->withoutRelations()
                     ])
                     ->useSecret($webhook->secret)
                     ->verifySsl(false)
