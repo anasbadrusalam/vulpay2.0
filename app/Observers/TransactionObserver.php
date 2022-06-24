@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Log;
 use Spatie\WebhookServer\WebhookCall;
 
 class TransactionObserver
@@ -26,6 +27,8 @@ class TransactionObserver
      */
     public function updated(Transaction $transaction)
     {
+        $payload = $transaction;
+        
         if ($transaction->isDirty('status')) {
 
             // if ($transaction->status == 'sukses') {
@@ -35,17 +38,19 @@ class TransactionObserver
             // if ($transaction->getOriginal('status') == 'sukses' && $transaction->status !== 'sukses') {
             //     $transaction->user->subBalance($transaction->balance);
             // }
-
+            
             if ($transaction->user->webhook) {
                 $webhook = $transaction->user->webhook;
                 WebhookCall::create()
                     ->url($webhook->url)
-                    ->payload(['data' => $transaction])
+                    ->payload(['data' => $payload
+                    ])
                     ->useSecret($webhook->secret)
+                    ->verifySsl(false)
+                    ->throwExceptionOnFailure()
                     ->dispatch();
             }
         }
-        
     }
 
     /**
