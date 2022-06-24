@@ -58,7 +58,9 @@ class Transaction extends Resource
 
             Text::make('Provider')->resolveUsing(function ($name) {
                 return strtoupper($name);
-            })->readonly(),
+            })
+                ->hideFromIndex()
+                ->readonly(),
 
 
             Text::make('Sender')
