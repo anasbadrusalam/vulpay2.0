@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -72,7 +73,13 @@ class Transaction extends Resource
             Number::make('Rate')
                 ->readonly(),
 
-            Currency::make('Balance')->currency('IDR'),
+            // Currency::make('Balance', function () {
+            //     return floor($this->amount * $this->rate);
+            // })->currency('IDR'),
+
+            Currency::make('Balance')
+                ->currency('IDR')
+                ->readonly(),
 
 
             Text::make('Receiver')
@@ -95,6 +102,15 @@ class Transaction extends Resource
                 'sukses' => 'success',
                 'dibatalkan' => 'danger',
             ]),
+
+            Select::make('Status')->options([
+                'dibatalkan' => 'dibatalkan',
+                'menunggu' => 'menunggu',
+                'sukses' => 'sukses',
+            ])
+                ->rules('required')
+                ->onlyOnForms()
+                ->hideWhenCreating(),
 
 
         ];

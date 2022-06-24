@@ -26,16 +26,26 @@ class TransactionObserver
      */
     public function updated(Transaction $transaction)
     {
+        if ($transaction->isDirty('status')) {
 
-        
-        if ($transaction->user->webhook) {
-            $webhook = $transaction->user->webhook;
-            WebhookCall::create()
-                ->url($webhook->url)
-                ->payload(['data' => $transaction])
-                ->useSecret($webhook->secret)
-                ->dispatch();
+            // if ($transaction->status == 'sukses') {
+            //     $transaction->user->addBalance($transaction->balance);
+            // }
+
+            // if ($transaction->getOriginal('status') == 'sukses' && $transaction->status !== 'sukses') {
+            //     $transaction->user->subBalance($transaction->balance);
+            // }
+
+            if ($transaction->user->webhook) {
+                $webhook = $transaction->user->webhook;
+                WebhookCall::create()
+                    ->url($webhook->url)
+                    ->payload(['data' => $transaction])
+                    ->useSecret($webhook->secret)
+                    ->dispatch();
+            }
         }
+        
     }
 
     /**

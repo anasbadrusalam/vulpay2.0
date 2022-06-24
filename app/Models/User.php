@@ -47,6 +47,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function addBalance($balance)
+    {
+        $this->update([
+            'balance' => $this->balance + $balance
+        ]);
+    }
+
+    public function subBalance($balance)
+    {
+        $this->update([
+            'balance' => $this->balance - $balance
+        ]);
+    }
+
     public function webhook()
     {
         return $this->hasOne(Webhook::class);
