@@ -40,7 +40,7 @@ class StoreTransaction extends FormRequest
                 'starts_with:0',
                 new NotServerNumber(),
                 new NotInBlackList($this->blacklist_check)],
-            'rate' => ['bail', 'required', 'numeric', new RateBelowProvider($this->provider)],
+            'rate' => ['bail', 'numeric', new RateBelowProvider($this->provider)],
         ];
     }
 }

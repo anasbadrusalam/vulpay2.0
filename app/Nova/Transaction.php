@@ -57,6 +57,9 @@ class Transaction extends Resource
             Text::make('Code')
                 ->readonly(),
 
+            Text::make('Terminal')
+                ->readonly(),
+
             Text::make('Provider')->resolveUsing(function ($name) {
                 return strtoupper($name);
             })

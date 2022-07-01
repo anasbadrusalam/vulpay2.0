@@ -71,8 +71,7 @@ class Receiver extends Resource
 
             Number::make('Balance')
                 ->rules('required', 'numeric')
-                ->default(0)
-                ->hideFromIndex(),
+                ->default(0),
 
             Boolean::make('Active')
                 ->rules('required'),
