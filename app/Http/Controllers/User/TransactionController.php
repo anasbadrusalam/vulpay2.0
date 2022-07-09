@@ -8,6 +8,7 @@ use App\Http\Resources\GeneralResource;
 use App\Models\Provider;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class TransactionController extends Controller
 {
@@ -90,7 +91,31 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
-        //
+        Gate::authorize('is-authorized', $transaction);
+
+        if ($transaction->status == 'menunggu') {
+
+            $transaction->update([
+                'status' => 'dibatalkan',
+                'note' => 'dibatalkan oleh user',
+            ]);
+
+            return (new GeneralResource($transaction))
+                ->additional([
+                    'status' => [
+                        'type' => 'success',
+                        'message' => 'Transaksi berhasil dibatalkan.'
+                    ]
+                ]);
+        }
+
+        return (new GeneralResource($transaction))
+            ->additional([
+                'status' => [
+                    'type' => 'error',
+                    'message' => 'Transaksi gagal dibatalkan.'
+                ]
+            ]);
     }
 
     /**

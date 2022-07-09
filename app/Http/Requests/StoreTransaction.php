@@ -39,8 +39,23 @@ class StoreTransaction extends FormRequest
                 'digits_between:10,15',
                 'starts_with:0',
                 new NotServerNumber(),
-                new NotInBlackList($this->blacklist_check)],
+                new NotInBlackList($this->blacklist_check)
+            ],
+            'amount' => ['bail', 'required', 'numeric'],
             'rate' => ['bail', 'numeric', new RateBelowProvider($this->provider)],
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'amount' => 'Nominal',
+            'sender' => 'Pengirim'
         ];
     }
 }
