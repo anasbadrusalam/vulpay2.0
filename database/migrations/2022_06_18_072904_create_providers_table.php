@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('providers', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique()->nullable();
             $table->string('name')->unique();
             $table->bigInteger('min')->default(50000);
             $table->bigInteger('max')->default(200000);

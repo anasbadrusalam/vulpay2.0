@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\AccordingToProvider;
 use App\Rules\NotInBlackList;
 use App\Rules\NotServerNumber;
 use App\Rules\ProviderAvailable;
@@ -41,7 +42,7 @@ class StoreTransaction extends FormRequest
                 new NotServerNumber(),
                 new NotInBlackList($this->blacklist_check)
             ],
-            'amount' => ['bail', 'required', 'numeric'],
+            'amount' => ['bail', 'required', 'numeric', new AccordingToProvider($this->provider)],
             'rate' => ['bail', 'numeric', new RateBelowProvider($this->provider)],
         ];
     }

@@ -109,13 +109,7 @@ class TransactionController extends Controller
                 ]);
         }
 
-        return (new GeneralResource($transaction))
-            ->additional([
-                'status' => [
-                    'type' => 'error',
-                    'message' => 'Transaksi gagal dibatalkan.'
-                ]
-            ]);
+        return response()->json(['error' => 'Unauthorized.'], 401);
     }
 
     /**
