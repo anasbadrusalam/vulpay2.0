@@ -19,10 +19,11 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('/otobot', function () {
-    return response()->json(['success' => true, 'message' => 'webhook landed perfectly :)']);
-});
+// Route::post('/otobot', function () {
+//     return response()->json(['success' => true, 'message' => 'webhook landed perfectly :)']);
+// });
 
+Route::webhooks('otobot');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {

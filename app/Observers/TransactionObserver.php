@@ -45,7 +45,6 @@ class TransactionObserver
                     ])
                     ->useSecret($webhook->secret)
                     ->verifySsl(false)
-                    ->throwExceptionOnFailure()
                     ->dispatch();
             }
         }
