@@ -54,7 +54,8 @@ class TransactionController extends Controller
             'terminal' => $receiver->terminal,
             'amount' => (int) $request->amount ? $request->amount : 0,
             'balance' => floor($request->amount * $rate),
-            'expired_at' => now()->addMinutes($provider->expired_time)
+            'expired_at' => now()->addMinutes($provider->expired_time),
+            'status' => 'menunggu'
         ]);
 
         return new GeneralResource($transaction);
@@ -109,7 +110,7 @@ class TransactionController extends Controller
                 ]);
         }
 
-        return response()->json(['error' => 'Unauthorized.'], 401);
+        return response()->json(['message' => 'Unauthorized.'], 401);
     }
 
     /**
