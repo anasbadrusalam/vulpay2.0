@@ -100,7 +100,7 @@ class TransactionController extends Controller
                 'note' => 'dibatalkan oleh user',
             ]);
 
-            return (new GeneralResource($transaction))
+            return (new GeneralResource($transaction->withoutRelations()))
                 ->additional([
                     'status' => [
                         'type' => 'success',

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\AccordingToProvider;
+use App\Rules\NoPendingTransaction;
 use App\Rules\NotInBlackList;
 use App\Rules\NotServerNumber;
 use App\Rules\ProviderAvailable;
@@ -40,6 +41,7 @@ class StoreTransaction extends FormRequest
                 'digits_between:10,15',
                 'starts_with:0',
                 new NotServerNumber(),
+                new NoPendingTransaction(),
                 new NotInBlackList($this->blacklist_check)
             ],
             'amount' => ['bail', 'required', 'numeric', new AccordingToProvider($this->provider)],

@@ -2,10 +2,10 @@
 
 namespace App\Rules;
 
-use App\Models\Receiver;
+use App\Models\Transaction;
 use Illuminate\Contracts\Validation\Rule;
 
-class NotServerNumber implements Rule
+class NoPendingTransaction implements Rule
 {
     /**
      * Create a new rule instance.
@@ -26,7 +26,7 @@ class NotServerNumber implements Rule
      */
     public function passes($attribute, $value)
     {
-        return Receiver::whereNumber($value)->get()->isEmpty();
+        return Transaction::whereSender($value)->whereStatus('menunggu')->get()->isEmpty();
     }
 
     /**
@@ -36,6 +36,6 @@ class NotServerNumber implements Rule
      */
     public function message()
     {
-        return 'Nomor pengirim tidak diizinkan.';
+        return 'Ada Transaksi yang belum selesai.';
     }
 }
