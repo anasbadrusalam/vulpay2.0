@@ -63,12 +63,15 @@ class User extends Resource
                 ->rules('required', 'max:255'),
 
             Text::make('Email')
+                ->readonly()
                 ->sortable()
                 ->rules('required', 'email', 'max:254')
                 ->creationRules('unique:users,email')
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
-            Currency::make('Balance')->currency('IDR'),
+            Currency::make('Balance')
+                ->readonly()
+                ->currency('IDR'),
 
             SanctumTokens::make(),
 

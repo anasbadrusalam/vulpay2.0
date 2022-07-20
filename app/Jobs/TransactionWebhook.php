@@ -45,9 +45,8 @@ class TransactionWebhook extends ProcessWebhookJob implements ShouldQueue
         if ($transaction && $data['amount'] >= 1000) {
             $transaction->update([
                 'amount' => $data['amount'],
-                'balance' => floor($data['amount'] * $transaction->rate),
                 'status' => 'sukses',
-                'note' => 'success by system'
+                'note' => 'disukseskan oleh sistem'
             ]);
         } else {
             $receiver = Receiver::whereTerminal($data['terminal'])->first();

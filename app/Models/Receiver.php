@@ -15,4 +15,18 @@ class Receiver extends Model
     {
         return $this->belongsTo(Provider::class);
     }
+
+    public function addBalance($balance)
+    {
+        $this->update([
+            'balance' => $this->balance + $balance
+        ]);
+    }
+
+    public function subBalance($balance)
+    {
+        $this->update([
+            'balance' => $this->balance - $balance
+        ]);
+    }
 }

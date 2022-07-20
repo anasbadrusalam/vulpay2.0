@@ -106,4 +106,9 @@ class BlackList extends Resource
     {
         return [];
     }
+
+    public static function redirectAfterUpdate(NovaRequest $request, $resource)
+    {
+        return '/resources/' . static::uriKey();
+    }
 }

@@ -58,6 +58,7 @@ class Transaction extends Resource
                 ->readonly(),
 
             Text::make('Terminal')
+                ->hideWhenUpdating()
                 ->readonly(),
 
             Text::make('Provider')->resolveUsing(function ($name) {
@@ -76,10 +77,6 @@ class Transaction extends Resource
             Number::make('Rate')
                 ->readonly(),
 
-            // Currency::make('Balance', function () {
-            //     return floor($this->amount * $this->rate);
-            // })->currency('IDR'),
-
             Currency::make('Balance')
                 ->currency('IDR')
                 ->readonly(),
@@ -90,14 +87,17 @@ class Transaction extends Resource
 
             DateTime::make('Created At')
                 ->hideFromIndex()
+                ->hideWhenUpdating()
                 ->readonly(),
 
             DateTime::make('Updated At')
                 ->hideFromIndex()
+                ->hideWhenUpdating()
                 ->readonly(),
 
             DateTime::make('Expired At')
                 ->hideFromIndex()
+                ->hideWhenUpdating()
                 ->readonly(),
 
             Badge::make('Status')->map([
@@ -163,5 +163,10 @@ class Transaction extends Resource
     public function actions(NovaRequest $request)
     {
         return [];
+    }
+
+    public static function redirectAfterUpdate(NovaRequest $request, $resource)
+    {
+        return '/resources/' . static::uriKey();
     }
 }

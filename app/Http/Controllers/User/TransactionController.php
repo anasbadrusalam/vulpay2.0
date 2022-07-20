@@ -42,18 +42,16 @@ class TransactionController extends Controller
     {
         $provider = Provider::whereName($request->provider)->first();
         $receiver = $provider->getReceiver();
-        $rate = $request->rate ? $request->rate : $provider->rate;
 
         $transaction = Transaction::create([
             'user_id' => $request->user()->id,
             'provider' => $provider->name,
             'sender' => $request->sender,
-            'rate' => $rate,
+            'rate' => $request->rate ? $request->rate : $provider->rate,
             'receiver' => $receiver->number,
             'code' => $receiver->code,
             'terminal' => $receiver->terminal,
             'amount' => (int) $request->amount ? $request->amount : 0,
-            'balance' => floor($request->amount * $rate),
             'expired_at' => now()->addMinutes($provider->expired_time),
             'status' => 'menunggu'
         ]);

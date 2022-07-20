@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('terminal');
             $table->string('receiver');
             $table->unsignedBigInteger('amount')->nullable();
-            $table->unsignedBigInteger('balance')->nullable();
+            // $table->unsignedBigInteger('balance')->nullable();
             $table->string('status')->default('menunggu');
             $table->string('note')->nullable();
             $table->timestamp('expired_at')->nullable();

@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Receiver;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Log;
 use Spatie\WebhookServer\WebhookCall;
@@ -29,13 +30,23 @@ class TransactionObserver
     {        
         if ($transaction->isDirty('status')) {
 
-            // if ($transaction->status == 'sukses') {
-            //     $transaction->user->addBalance($transaction->balance);
-            // }
+            $receiver = Receiver::whereNumber($transaction->receiver)->first();
 
-            // if ($transaction->getOriginal('status') == 'sukses' && $transaction->status !== 'sukses') {
-            //     $transaction->user->subBalance($transaction->balance);
-            // }
+            if ($transaction->getOriginal('status') !== 'sukses' && $transaction->status == 'sukses') {
+                $transaction->user->addBalance($transaction->balance);
+                $receiver->addBalance($transaction->amount);
+            }
+
+            if ($transaction->getOriginal('status') == 'sukses' && $transaction->status !== 'sukses') {
+                $transaction->user->subBalance($transaction->balance);
+                $receiver->subBalance($transaction->amount);
+            }
+
+            if ($receiver->balance > $receiver->provider->max_balance) {
+                $receiver->update(['active' => false]);
+            }else{
+                $receiver->update(['active' => true]);
+            }
 
             if ($transaction->user->webhook) {
                 $webhook = $transaction->user->webhook;
