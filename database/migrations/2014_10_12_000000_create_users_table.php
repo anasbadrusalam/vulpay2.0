@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->bigInteger('balance')->default(0);
-            $table->string('token')->nullable()->unique();
+            $table->bigInteger('points')->default(0);
+            // $table->string('token')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

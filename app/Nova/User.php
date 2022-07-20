@@ -12,6 +12,8 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Jeffbeltran\SanctumTokens\SanctumTokens;
+
 
 class User extends Resource
 {
@@ -51,10 +53,10 @@ class User extends Resource
 
             // Gravatar::make()->maxWidth(50),
 
-            Text::make('Token')
-                ->copyable()
-                ->readonly()
-                ->onlyOnDetail(),
+            // Text::make('Token')
+            //     ->copyable()
+            //     ->readonly()
+            //     ->onlyOnDetail(),
 
             Text::make('Name')
                 ->sortable()
@@ -67,6 +69,8 @@ class User extends Resource
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
             Currency::make('Balance')->currency('IDR'),
+
+            SanctumTokens::make(),
 
             HasOne::make('Webhook'),
 

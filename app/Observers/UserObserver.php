@@ -15,9 +15,9 @@ class UserObserver
      */
     public function created(User $user)
     {
-        $user->update([
-            'token' => $user->createToken('api-token')->plainTextToken
-        ]);
+        // $user->update([
+        //     'token' => $user->createToken('api-token')->plainTextToken
+        // ]);
     }
 
     /**
