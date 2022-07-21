@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Inbox;
 use App\Models\Receiver;
 use App\Models\Transaction;
+use App\Notifications\TelegramNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,6 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Spatie\WebhookClient\Models\WebhookCall;
 use Spatie\WebhookClient\Jobs\ProcessWebhookJob;
 
@@ -56,6 +58,10 @@ class TransactionWebhook extends ProcessWebhookJob implements ShouldQueue
                 'sender' => $data['sender'],
                 'amount' => $data['amount'],
             ]);
+
+            $content = "Pulsa Masuk Tidak Ada Transaksi\r\n\r\nTerminal : " . $inbox->terminal . "\r\nCode : " . $inbox->code . "\r\nSender : " . $inbox->sender . "\r\nAmount : " . $inbox->amount;
+            Notification::route('telegram', config('services.telegram-bot-api.chat-id'))
+                ->notify(new TelegramNotification($content));
         }
     }
 }

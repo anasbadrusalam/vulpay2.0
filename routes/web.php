@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $transaction = Transaction::find(1);
-    dd($transaction->saldo);
+    dd($transaction->balance);
     return view('welcome');
 });
 
