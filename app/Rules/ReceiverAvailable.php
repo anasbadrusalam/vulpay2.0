@@ -3,7 +3,9 @@
 namespace App\Rules;
 
 use App\Models\Provider;
+use App\Notifications\TelegramNotification;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Notification;
 
 class ReceiverAvailable implements Rule
 {
@@ -33,6 +35,10 @@ class ReceiverAvailable implements Rule
                 return true;
             }
             $provider->update(['active' => false]);
+            
+            $content = "Provider ".$provider->name. " Gangguan";
+            Notification::route('telegram', config('services.telegram-bot-api.chat-id'))
+                ->notify(new TelegramNotification($content));
         }
 
         return false;
